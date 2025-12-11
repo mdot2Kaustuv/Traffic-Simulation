@@ -3,19 +3,21 @@ from queue import Vehicle
 import time
 
 data_file = "Traffic.data"
-LANES = ["A","B","C","D"]
+LANES = ["A","B","C"]
+road = ["W","X","Y","Z"]
 
 def record (Vehicle) :
     with open(data_file, "a") as file:
-        file.write(f"{Vehicle.lane},{Vehicle.id},{Vehicle.time}\n")
+        file.write(f"{Vehicle.id},{Vehicle.lane},{Vehicle.road},{Vehicle.time}\n")
 
-def generate_vehicle (delay = 2.0):
+def generate_vehicle (delay = 1.0):
     while True :
-        road = random.choice(LANES)
+        vehicle_road = random.choice(road)
+        vehicle_lane = random.choice(LANES)
         vehicle_id = random.randint(1,10000)
         interval = random.expovariate(1.0 / delay)
         time.sleep(interval)
-        return Vehicle(vehicle_id, road,interval)
+        return Vehicle(vehicle_id,vehicle_lane,vehicle_road,time.time())
 
 def generator():
     while True:

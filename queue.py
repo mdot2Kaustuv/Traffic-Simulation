@@ -1,12 +1,13 @@
 
 class Vehicle :
-    def __init__ (self,id,lane,time) :
+    def __init__ (self,id,lane,road,time) :
         self.id = id
         self.lane = lane
+        self.road = road
         self.time = time
 
     def __str__ (self) :
-        return f'{self.id} {self.lane} {self.time}'
+        return f'{self.id} {self.lane}{self.road} {self.time}'
 
 
 class queue :
@@ -17,7 +18,7 @@ class queue :
         return len(self.queue) == 0
 
     def enqueue(self,Vehicle):
-        self.queue.append(Vehicle )
+        self.queue.append(Vehicle)
 
     def dequeue(self):
         if self.is_empty():
@@ -32,40 +33,27 @@ class queue :
     def size(self):
         return len(self.queue)
 
-class lane :
+class LaneStats :
     def __init__(self):
         self.lanes ={}
-        for k in ["A","B","C","D"]:
-            self.lanes[k]= queue()
-            self.priority = False
+        for road in ["W","X","Y","Z"]:
+            for lane in ["A","B","C"]:
+                self.lanes[f"{road}{lane}"]= queue()
+        self.priority = False
 
+    def enqueue(self,Vehicle):
+        k = f"{Vehicle.road}{Vehicle.lane}"
+        self.lanes[k].enqueue(Vehicle)
 
-    def enqueue(self,Vehicle,road):
-        self.lanes[road].enqueue(Vehicle)
+    def dequeue(self,road,lane):
+        key = f"{road}{lane}"
+        if self.lanes[key].is_empty():
+            return None
+        return self.lanes[key].dequeue()
 
-    def dequeue(self,road):
-        if self.lanes[road].is_empty() :
-            raise KeyError
-        self.lanes[road].dequeue()
+    def size(self,road,lane):
+        return self.lanes[f"{road}{lane}"].size()
 
-    def size(self,road):
-        return self.lanes[road].size()
-
-    def is_empty(self,road):
-        return self.lanes[road].is_empty()
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def is_empty(self,road,lane):
+        return self.lanes[f"{road}{lane}"].is_empty()
 
