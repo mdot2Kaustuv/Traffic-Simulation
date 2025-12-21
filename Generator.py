@@ -1,9 +1,11 @@
 import random
 from Vehicles import Vehicle
 import time
+from Lanes import LaneManager
 
+lm = LaneManager()
 data_file = "Traffic.data"
-LANES = ["1","2","3"]
+LANES = [1,2,3]
 road = ["A","B","C","D"]
 
 def record (Vehicle) :
@@ -11,7 +13,7 @@ def record (Vehicle) :
         file.write(f"{Vehicle.id},{Vehicle.lane},{Vehicle.road},{Vehicle.time}\n")
 
 def generate_vehicle (delay = 1.0):
-    while True :
+
         vehicle_road = random.choice(road)
         vehicle_lane = random.choice(LANES)
         vehicle_id = random.randint(1,10000)
@@ -23,6 +25,7 @@ def generator():
     while True:
         v=generate_vehicle()
         record(v)
+        lm.enqueue(v.road,v.lane,v)
 
 
 generator()
