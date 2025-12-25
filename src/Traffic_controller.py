@@ -1,97 +1,101 @@
-
-
-from Roads import Road
-from Lanes import LaneManager
-from  Trafficlights import TrafficLight
+from Trafficlights import TrafficLight
 import time
 
+
 class TrafficController:
-    def __init__(self):
+    def __init__(self, shared_lm):
         self.roads = ["A", "B", "C", "D"]
-        self.t = 2
-        self.lm = LaneManager()
+        self.lm = shared_lm
         self.lights = {
-            "A" : TrafficLight(),
-            "B" : TrafficLight(),
-            "C" : TrafficLight(),
-            "D" : TrafficLight(),
-
+            "A": TrafficLight(),
+            "B": TrafficLight(),
+            "C": TrafficLight(),
+            "D": TrafficLight(),
         }
+
+        # Configuration
         self.priority_road = "A"
-        self.priority_lane =2
+        self.priority_threshold = 10
+        self.priority_min = 5
+        self.service_delay = 0.5
 
-    def vehicle_served(self) :
-        normal_lanes = ["B", "C", "D"]
-        total_vehicles = sum(self.lm.size(road, 2) for road in normal_lanes)
-        n = len(normal_lanes)
-        if total_vehicles == 0:
-            return 0
-        average = int (total_vehicles / n)
-        return max (1, average)
-
-    def priority(self):
-        prioritycount = self.lm.size(self.priority_road, self.priority_lane)
-        return prioritycount > 10
-
-    def serve_if_priority(self):
-       for road in self.roads :
-           if road!=self.priority_road:
-               self.lights[road].set_red()
-
-       self.lights[self.priority_road].set_green()
-
-       while self.lm.size(self.priority_road, self.priority_lane) >= 5:
-           vehicle_count = self.lm.size(self.priority_road, self.priority_lane)
-           self.lm.dequeue(self.priority_road, self.priority_lane)
-
-
-       self.lights[self.priority_road].set_green()
-
-
-    def serve_normal(self) :
-        normalroads = ["B","C","D"]
-        lane = 2
-
-        for road in normalroads:
-            vehiclecount = self.vehicle_served()
-            vehicle_number = self.lm.size(road,lane)
-
-            if vehicle_number > 0 :
+    def set_active_light(self, active_road):
+        for road in self.roads:
+            if road == active_road:
                 self.lights[road].set_green()
-
-                for nonactiveroad in self.roads :
-                        self.lights[nonactiveroad].set_red()
-
-                green_time = vehiclecount*self.t
-
-                for i in range( vehiclecount):
-                    self.lm.dequeue(road, lane)
-                    time.sleep(self.t)
-
-
+            else:
                 self.lights[road].set_red()
 
+    def get_controlled_cars_count(self, road):
+        return self.lm.size(road, 1) + self.lm.size(road, 2)
+
+    def service_free_lanes(self):
+
+        for road in self.roads:
+            if self.lm.size(road, 3) > 0:
+              self.lm.dequeue(road, 3)
+
+    def dequeue_controlled_vehicle(self, road):
+        for lane in [1, 2]:
+            if self.lm.size(road, lane) > 0:
+                self.lm.dequeue(road, lane)
+                return True
+        return False
+
+    def priority_condition_met(self):
+        return self.get_controlled_cars_count(self.priority_road) > self.priority_threshold
+
+    def serve_priority(self):
+        self.set_active_light(self.priority_road)
+
+        # Serve until queue drops below 5 (as per PDF)
+        while self.get_controlled_cars_count(self.priority_road) > self.priority_min:
+            self.service_free_lanes()  # Keep free lanes moving!
+
+            served = self.dequeue_controlled_vehicle(self.priority_road)
+            if served:
+                time.sleep(self.service_delay)
+            else:
+                break
+
+    def serve_normal_cycle(self):
+        normal_roads = ["B", "C", "D"]
+        all_roads = ["A", "B", "C", "D"]
+
+        for road in all_roads:
+            if self.priority_condition_met():
+                return  # Interrupt to handle priority
+
+            vehicle_count = self.get_controlled_cars_count(road)
+
+            if vehicle_count > 0:
+                self.set_active_light(road)
 
 
+                cars_to_serve = min(vehicle_count, 5)
+
+                for _ in range(cars_to_serve):
+                    self.service_free_lanes()  # Keep free lanes moving!
+
+                    served = self.dequeue_controlled_vehicle(road)
+                    if served:
+                        time.sleep(self.service_delay)
 
     def run(self):
-        cycle = 0
-
+        print("Traffic Controller Started.")
         while True:
-            cycle += 1
+            self.service_free_lanes()
 
-            if self.priority() :
-                self.serve_if_priority()
-            else :
-                self.serve_normal()
-                time.sleep(self.t)
+            if self.priority_condition_met():
+                self.serve_priority()
+            else:
+                self.serve_normal_cycle()
 
-
-
-controller = TrafficController()
-controller.run()
+            time.sleep(0.1)
 
 
-
-
-
+if __name__ == "__main__":
+    from Lanes import LaneManager
+    lm = LaneManager()
+    c = TrafficController(lm)
+    c.run()

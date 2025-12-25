@@ -24,10 +24,9 @@ class LaneManager:
         return 0
 
     def get_vehicles(self,road):
-        def get_vehicles(self, road):
-            if road in self.roads:
-                return self.roads[road].size(2)
-            return 0
+        if road in self.roads:
+            return self.roads[road].size(2)
+        return 0
 
 
 

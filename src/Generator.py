@@ -13,7 +13,7 @@ def record (Vehicle) :
     with open(data_file, "a") as file:
         file.write(f"{Vehicle.id},{Vehicle.lane},{Vehicle.road},{Vehicle.time},{Vehicle.direction}\n")
 
-def generate_vehicle (delay = 1.0):
+def generate_vehicle (delay =2.0):
 
         vehicle_road = random.choice(road)
         vehicle_lane = random.choice(LANES)
@@ -30,7 +30,6 @@ def generate_vehicle (delay = 1.0):
 
 
 def generator():
-    while True:
         v=generate_vehicle()
         record(v)
         lm.enqueue(v.road,v.lane,v)
