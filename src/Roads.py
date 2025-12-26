@@ -12,7 +12,7 @@ class Road:
         self.lanes[lane].enqueue(vehicle)
 
     def dequeue(self,lane):
-        self.lanes[lane].dequeue()
+       return self.lanes[lane].dequeue()
 
     def size(self,lane):
         return self.lanes[lane].size()

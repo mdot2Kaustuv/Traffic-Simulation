@@ -14,7 +14,7 @@ class LaneManager:
             self.roads[road].enqueue(lane,vehicle)
 
     def dequeue(self,road,lane) :
-        self.roads[road].dequeue(lane)
+         return self.roads[road].dequeue(lane)
 
     def size(self,road,lane):
         if road in self.roads :
