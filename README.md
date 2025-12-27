@@ -19,7 +19,12 @@ This project simulates a 4-way traffic intersection using Python and Pygame. The
 
 This project demonstrates the use of Queue and Priority Queue algorithms to simulate a four-way junction using linear data structures to manage vehicle flow and traffic light transitions based on real-time lane conditions. Unlike standard traffic lights which use timers, this simulation uses a Priority Queue logic. If North most lane (Road A, Lane 1) traffic exceeds more than 10, the system prioritizes the lane AL2 to handle the traffic congestion.
 
-## Output
+
+
+## Simulator Demo
+
+[Simulator Demo](https://raw.githubusercontent.com/mdot2Kaustuv/DSA-Queue-Simulator/main/Simulator.mp4)
+
 
 ### System Overview
 
@@ -62,8 +67,8 @@ git clone https://github.com/mdot2Kaustuv/DSA-Queue-Simulator
 
 Ensure your folder format looks like this:
 
-
-
+## Directory 
+```
 /DSA-Queue-Simulator/
 ├── src/
 │   ├── Generator.py
@@ -77,7 +82,7 @@ Ensure your folder format looks like this:
 ├── .gitignore
 ├── README.md
 └── Simulator.mp4
-
+```
 ## Execution Instructions
 After cloning the repository, access the directory:
 
@@ -104,3 +109,39 @@ python src/Simulator.py
 ```
 
 Output: A Pygame window with the simulation.
+
+# Time Complexity 
+
+The complexity is divided into two parts: the Backend Logic (Queues & Controller) and the Frontend Visualization (Simulator).
+
+ 1. Data Structure Operations (Queues.py)
+ This is the foundation of your simulation's performance.
+
+ - enqueue: O(1)
+   self.queue.append(vehicle) adds to the end of the  list. This is a constant time
+   
+ - dequeue: O(N)
+   self.queue.pop(0) removes the first element of a Python list.
+
+2. Traffic Controller Logic (Traffic_controller.py)The controller runs in a separate thread. Its complexity depends on the number of cars waiting in the lanes (N)
+- get_controlled_cars_count: O(1)
+  It calls len() on the list, which is constant time.
+- dequeue_controlled_vehicle: O(N) It calls the dequeue method from Queues.py, inheriting the O(N) cost described above.
+- serve_normal_cycle: O(K * N)
+  It iterates through a constant number of roads (4).It dequeues up to $K$ cars (where $K=5$ in your code).Since each    dequeue is $O(N)$, one cycle step is linear with respect to the queue size.3. Visual Simulator (Simulator.py)
+
+3. Visual Simulator (Simulator.py)
+This is where the heaviest computational load exists. Let V be the number of visible vehicles currently moving on the screen.
+- Spawning Logic: O(V)
+  You filter the list of vehicles: [v for v in visual_vehicles ...]To do this, the code must iterate through every existing vehicle on screen.
+- Collision Detection
+  Inside the main loop, you iterate through every vehicle
+  **Complexity**: Quadratic Time
+
+# Best Case
+ The simulation runs smoothly at $O(1)$
+
+# Worst Case 
+ -**Backend:** O(N) (Linear) : As queues grow, releasing cars gets slightly slower, but this is usually negligible for N < 10,000.
+
+-**Frontend** O(V^2) : This is the critical performance hitter. If you increase the traffic density significantly, the frame rate will drop exponentially
