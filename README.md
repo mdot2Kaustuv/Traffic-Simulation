@@ -23,7 +23,7 @@ This project demonstrates the use of Queue and Priority Queue algorithms to simu
 
 ## Simulator Demo
 
-[Simulator Demo](https://raw.githubusercontent.com/mdot2Kaustuv/DSA-Queue-Simulator/main/Simulator.mp4)
+https://github.com/user-attachments/assets/5c206253-73e5-4658-b212-cafef9f756e8 
 
 
 ### System Overview
