@@ -1,5 +1,7 @@
-Traffic Management System and DSA Queue Management System
-Title
+# Traffic Management System and DSA Queue Management System
+
+## Title
+
 Assignment: 1
 
 Name: Kaustuv Bhandari
@@ -12,12 +14,12 @@ Submitted to: Rupak Ghimire
 
 Date: 2025-12-27
 
-Overview
+## Overview
 This project simulates a 4-way traffic intersection using Python and Pygame. The core objective of this project is to demonstrate the practical use of Data Structures and Algorithms (DSA).
 
 This project demonstrates the use of Queue and Priority Queue algorithms to simulate a four-way junction using linear data structures to manage vehicle flow and traffic light transitions based on real-time lane conditions. Unlike standard traffic lights which use timers, this simulation uses a Priority Queue logic. If North most lane (Road A, Lane 1) traffic exceeds more than 10, the system prioritizes the lane AL2 to handle the traffic congestion.
 
-Output
+## Output
 System Overview
 The system follows a Producer-Consumer pattern. The Generator produces vehicle data (incoming traffic), while the Simulator and Traffic_Controller consume that data to manage the junction flow using data structures.
 
