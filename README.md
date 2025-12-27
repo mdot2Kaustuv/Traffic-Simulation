@@ -25,19 +25,19 @@ This project demonstrates the use of Queue and Priority Queue algorithms to simu
 
 The system follows a Producer-Consumer pattern. The Generator produces vehicle data (incoming traffic), while the Simulator and Traffic_Controller consume that data to manage the junction flow using data structures.
 
--Generator.py: Produces vehicle data (incoming traffic) by randomly determining the Vehicle ID, Time, road, and lane, then writes it to the Traffic.data file.
+- Generator.py: Produces vehicle data (incoming traffic) by randomly determining the Vehicle ID, Time, road, and lane, then writes it to the Traffic.data file.
 
--Traffic_controller.py & Trafficlights.py: Traffic_controller.py monitors these queues, triggering a high-priority state if lane AL1 exceeds 10 vehicles, ensuring it is served first until the count drops below 5. Trafficlights.py switches lights between State 1 (Red/Stop) and State 2 (Green/Go).
+- Traffic_controller.py & Trafficlights.py: Traffic_controller.py monitors these queues, triggering a high-priority state if lane AL1 exceeds 10 vehicles, ensuring it is served first until the count drops below 5. Trafficlights.py switches lights between State 1 (Red/Stop) and State 2 (Green/Go).
 
--Queues.py, Lanes.py, & Roads.py: Implements the linear logic where vehicles enter (enqueue) and exit (dequeue) the junction.
+- Queues.py, Lanes.py, & Roads.py: Implements the linear logic where vehicles enter (enqueue) and exit (dequeue) the junction.
 
--Simulator.py: Integrates these components using Pygame to visually render the junction, manage traffic light states (Red/Green), and ensure safety by preventing deadlocks through strict state management.
+- Simulator.py: Integrates these components using Pygame to visually render the junction, manage traffic light states (Red/Green), and ensure safety by preventing deadlocks through strict state management.
 
 ## Features
 
--Intelligent Priority Management:The system actively monitors the queue length of Lane AL2. When congestion exceeds 10 vehicles, it activates a "Priority Mode" that overrides standard cycles to grant a continuous green light until the lane count is reduced to 5 or fewer.
+- Intelligent Priority Management:The system actively monitors the queue length of Lane AL2. When congestion exceeds 10 vehicles, it activates a "Priority Mode" that overrides standard cycles to grant a continuous green light until the lane count is reduced to 5 or fewer.
 
--Left-Hand Traffic (LHT) Standard: The simulation is designed to follow LHT protocols, which are the standard driving rules in regions like Nepal and the UK.
+- Left-Hand Traffic (LHT) Standard: The simulation is designed to follow LHT protocols, which are the standard driving rules in regions like Nepal and the UK.
 
 - Real-Time Graphical Visualization:## Utilizing Pygame, the simulator.py script provides a high-fidelity visualization featuring animated vehicle movement, realistic lane markings, and glowing traffic light indicators.
 
